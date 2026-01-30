@@ -1,0 +1,10 @@
+select id from (
+    select 
+    id, 
+    recordDate,
+    temperature,
+    lag(temperature, 1) over(order by recordDate) `prev_temperature`,
+    lag(recordDate, 1) over(order by recordDate) `prev_date`
+    from weather
+) t 
+where temperature > prev_temperature and recordDate = DATE_ADD(prev_date, interval 1 day)
